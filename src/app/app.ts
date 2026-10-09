@@ -1,13 +1,13 @@
-import {Component, inject, signal} from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {AlojamientoService} from './core/services/alojamiento.service';
+import { Navbar } from './shared/components/navbar/navbar';
+import { Footer } from './shared/components/footer/footer';
 
+/** Componente raíz: arma el esqueleto de la página (barra, contenido y pie). */
 @Component({
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Navbar, Footer],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {
-  protected readonly title = signal('lodge-in');
-}
+export class App {}
