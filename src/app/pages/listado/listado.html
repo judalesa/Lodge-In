@@ -3,6 +3,11 @@
   {{ alojamientos().length }} {{ alojamientos().length === 1 ? 'alojamiento disponible' : 'alojamientos disponibles' }}
 </p>
 
+<!-- TEMPORAL (C17): en C18 los filtros pasan a una columna lateral y filtran el grid -->
+<div class="mb-4" style="max-width: 360px">
+  <app-filtros [ciudades]="ciudades()" [tipos]="tipos()" (filtrosCambiados)="verFiltros($event)" />
+</div>
+
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   @for (alojamiento of alojamientos(); track alojamiento.id) {
     <div class="col">
