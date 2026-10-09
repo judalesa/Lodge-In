@@ -1,22 +1,7 @@
-export type TipoAlojamiento = 'Apartamento' | 'Casa' | 'Cabaña';
-
-export interface Alojamiento {
+export interface Resena {
   id: number;
-  nombre: string;
-  descripcion: string;
-  ciudad: string;
-  ubicacion: string;
-  tipo: TipoAlojamiento;
-  capacidad: number;
-  habitaciones: number;
-  camas: number;
-  banos: number;
-  precioNoche: number;
-  tarifaLimpieza: number;
+  alojamientoId: number;
+  usuario: string;
   calificacion: number;
-  activo: boolean;
-  imagenPrincipal: string;
-  imagenes: string[];
-  servicios: string[];
-  reglas: string[];
+  comentario: string;
 }
