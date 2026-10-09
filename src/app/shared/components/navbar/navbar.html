@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+    <!-- Nombre de la plataforma: lleva al inicio -->
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <i class="bi bi-house-heart-fill me-1"></i> Lodge In
+    </a>
+
+    <!-- Botón hamburguesa: solo se ve en pantallas pequeñas -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+            aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Enlaces: routerLinkActive marca con la clase "active" la página actual -->
+    <div class="collapse navbar-collapse" id="menuPrincipal">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/alojamientos" routerLinkActive="active">Alojamientos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/mis-reservas" routerLinkActive="active">Mis reservas</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
