@@ -26,4 +26,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/mis-reservas/mis-reservas').then(m => m.MisReservas),
     title: 'Lodge In · Mis reservas',
   },
+  {
+    // '**' atrapa cualquier ruta que no coincida con las de arriba.
+    // Debe ir SIEMPRE de última: Angular revisa las rutas en orden.
+    path: '**',
+    loadComponent: () => import('./pages/no-encontrado/no-encontrado').then(m => m.NoEncontrado),
+    title: 'Lodge In · Página no encontrada',
+  },
 ];
