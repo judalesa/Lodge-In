@@ -1,3 +1,29 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+/**
+ * Rutas de la aplicación.
+ * loadComponent carga cada página solo cuando se visita (carga perezosa).
+ * title cambia el texto de la pestaña del navegador.
+ */
+export const routes: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./pages/inicio/inicio').then(m => m.Inicio),
+    title: 'Lodge In · Inicio',
+  },
+  {
+    path: 'alojamientos',
+    loadComponent: () => import('./pages/listado/listado').then(m => m.Listado),
+    title: 'Lodge In · Alojamientos',
+  },
+  {
+    path: 'alojamientos/:id',
+    loadComponent: () => import('./pages/detalle/detalle').then(m => m.Detalle),
+    title: 'Lodge In · Detalle',
+  },
+  {
+    path: 'mis-reservas',
+    loadComponent: () => import('./pages/mis-reservas/mis-reservas').then(m => m.MisReservas),
+    title: 'Lodge In · Mis reservas',
+  },
+];
