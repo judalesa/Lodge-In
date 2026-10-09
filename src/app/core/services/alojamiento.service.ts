@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, shareReplay } from 'rxjs';
-import { Alojamiento, MarketplaceData, Resena, TipoAlojamiento } from '../models';
+import { Alojamiento, FiltrosBusqueda, MarketplaceData, Resena, TipoAlojamiento } from '../models';
 
 /** Ruta del archivo de datos dentro de public/ (Angular la sirve desde la raíz). */
 const DATA_URL = 'assets/data/marketplace-data.json';
@@ -70,6 +70,20 @@ export class AlojamientoService {
   getTipos(): Observable<TipoAlojamiento[]> {
     return this.getAlojamientos().pipe(
       map(lista => [...new Set(lista.map(a => a.tipo))].sort((a, b) => a.localeCompare(b)))
+    );
+  }
+
+  /**
+   * Aplica los filtros de búsqueda a una lista de alojamientos.
+   * Es una función pura: no lee el JSON ni modifica la lista original, solo devuelve una nueva.
+   * Un filtro en null significa "no filtrar por ese campo".
+   */
+  filtrar(lista: Alojamiento[], f: FiltrosBusqueda): Alojamiento[] {
+    return lista.filter(a =>
+      (f.ciudad === null || a.ciudad === f.ciudad) &&
+      (f.huespedes === null || a.capacidad >= f.huespedes) &&
+      (f.tipo === null || a.tipo === f.tipo) &&
+      (f.precioMaximo === null || a.precioNoche <= f.precioMaximo)
     );
   }
 }
