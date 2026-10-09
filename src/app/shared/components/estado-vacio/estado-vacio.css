@@ -1,0 +1,11 @@
+/* Recuadro con borde punteado para que se note que es un espacio "vacío". */
+.estado-vacio {
+  border: 2px dashed var(--bs-border-color);
+  background-color: var(--bs-tertiary-bg);
+}
+
+/* Ícono grande y gris. */
+.icono {
+  font-size: 4rem;
+  color: var(--bs-secondary-color);
+}
