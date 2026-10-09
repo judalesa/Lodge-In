@@ -1,17 +1,34 @@
 <h1 class="mb-1">Alojamientos</h1>
 <p class="text-muted mb-4">
-  {{ alojamientos().length }} {{ alojamientos().length === 1 ? 'alojamiento disponible' : 'alojamientos disponibles' }}
+  {{ resultados().length }} {{ resultados().length === 1 ? 'alojamiento disponible' : 'alojamientos disponibles' }}
 </p>
 
-<!-- TEMPORAL (C17): en C18 los filtros pasan a una columna lateral y filtran el grid -->
-<div class="mb-4" style="max-width: 360px">
-  <app-filtros [ciudades]="ciudades()" [tipos]="tipos()" (filtrosCambiados)="verFiltros($event)" />
-</div>
+<div class="row g-4">
+  <!-- Columna de filtros: arriba en celular, a la izquierda en pantalla grande -->
+  <aside class="col-lg-3">
+    <app-filtros [ciudades]="ciudades()" [tipos]="tipos()" (filtrosCambiados)="filtros.set($event)" />
+  </aside>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-  @for (alojamiento of alojamientos(); track alojamiento.id) {
-    <div class="col">
-      <app-alojamiento-card [alojamiento]="alojamiento" />
-    </div>
-  }
+  <!-- Columna de resultados -->
+  <section class="col-lg-9">
+    @if (resultados().length === 0) {
+      <app-estado-vacio
+        icono="search"
+        titulo="No encontramos alojamientos con esos filtros"
+        mensaje="Prueba con otra ciudad, menos huéspedes o un precio más alto."
+      >
+        <button type="button" class="btn btn-primary" (click)="limpiarFiltros()">
+          <i class="bi bi-x-circle"></i> Limpiar filtros
+        </button>
+      </app-estado-vacio>
+    } @else {
+      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @for (alojamiento of resultados(); track alojamiento.id) {
+          <div class="col">
+            <app-alojamiento-card [alojamiento]="alojamiento" />
+          </div>
+        }
+      </div>
+    }
+  </section>
 </div>
