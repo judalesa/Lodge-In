@@ -1,2 +1,12 @@
-<h1>Alojamientos</h1>
-<p class="text-muted">Aquí irá el listado con filtros (Fase 4).</p>
+<h1 class="mb-1">Alojamientos</h1>
+<p class="text-muted mb-4">
+  {{ alojamientos().length }} {{ alojamientos().length === 1 ? 'alojamiento disponible' : 'alojamientos disponibles' }}
+</p>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  @for (alojamiento of alojamientos(); track alojamiento.id) {
+    <div class="col">
+      <app-alojamiento-card [alojamiento]="alojamiento" />
+    </div>
+  }
+</div>
