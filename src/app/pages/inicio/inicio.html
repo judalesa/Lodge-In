@@ -1,11 +1,34 @@
-<h1>Inicio</h1>
-<p class="text-muted">Aquí irán el buscador y los alojamientos destacados (Fase 5).</p>
+<!-- Portada (hero) -->
+<section class="hero rounded-4 text-white text-center d-flex align-items-center mb-5">
+  <div class="w-100 px-3 py-5">
+    <h1 class="display-4 fw-bold"><i class="bi bi-house-heart-fill"></i> Lodge In</h1>
+    <p class="lead mb-4">Encuentra tu próximo alojamiento en Colombia</p>
 
-<!-- TEMPORAL (C14): prueba de la tarjeta de alojamiento -->
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-  @for (alojamiento of alojamientos(); track alojamiento.id) {
-    <div class="col">
-      <app-alojamiento-card [alojamiento]="alojamiento" />
-    </div>
-  }
-</div>
+    <!-- Buscador rápido -->
+    <form [formGroup]="buscador" (ngSubmit)="buscar()" class="buscador bg-white rounded-3 shadow p-3 mx-auto text-start">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-5">
+          <label for="buscar-ciudad" class="form-label text-body small mb-1">Ciudad</label>
+          <select id="buscar-ciudad" class="form-select" formControlName="ciudad">
+            <option [ngValue]="null">Cualquier ciudad</option>
+            @for (ciudad of ciudades(); track ciudad) {
+              <option [ngValue]="ciudad">{{ ciudad }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="buscar-huespedes" class="form-label text-body small mb-1">Huéspedes</label>
+          <input id="buscar-huespedes" type="number" min="1" class="form-control"
+                 formControlName="huespedes" placeholder="¿Cuántos son?" />
+        </div>
+        <div class="col-md-3 d-grid">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-search"></i> Buscar
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <a routerLink="/alojamientos" class="btn btn-outline-light mt-4">Ver todos los alojamientos</a>
+  </div>
+</section>
