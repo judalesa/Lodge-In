@@ -32,3 +32,38 @@
     <a routerLink="/alojamientos" class="btn btn-outline-light mt-4">Ver todos los alojamientos</a>
   </div>
 </section>
+
+<!-- Destacados: la misma tarjeta del listado, reutilizada -->
+<section class="mb-5">
+  <div class="d-flex justify-content-between align-items-end mb-3">
+    <div>
+      <h2 class="mb-0">Destacados</h2>
+      <p class="text-muted mb-0">Los alojamientos mejor calificados por nuestros huéspedes</p>
+    </div>
+    <a routerLink="/alojamientos" class="d-none d-md-inline">Ver todos <i class="bi bi-arrow-right"></i></a>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @for (alojamiento of destacados(); track alojamiento.id) {
+      <div class="col">
+        <app-alojamiento-card [alojamiento]="alojamiento" />
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ¿Cómo funciona? -->
+<section class="como-funciona rounded-4 p-4 p-md-5 mb-4">
+  <h2 class="text-center mb-4">¿Cómo funciona?</h2>
+  <div class="row g-4 text-center">
+    @for (paso of pasos; track paso.titulo; let i = $index) {
+      <div class="col-md-4">
+        <div class="paso-icono mx-auto mb-3">
+          <i class="bi bi-{{ paso.icono }}"></i>
+        </div>
+        <h3 class="h5">{{ i + 1 }}. {{ paso.titulo }}</h3>
+        <p class="text-muted mb-0">{{ paso.texto }}</p>
+      </div>
+    }
+  </div>
+</section>
