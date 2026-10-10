@@ -1,0 +1,43 @@
+<form [formGroup]="form" class="card card-body shadow-sm">
+  <h2 class="h5 mb-3"><i class="bi bi-funnel"></i> Filtros</h2>
+
+  <div class="mb-3">
+    <label for="filtro-ciudad" class="form-label">Ciudad</label>
+    <select id="filtro-ciudad" class="form-select" formControlName="ciudad">
+      <!-- [ngValue]="null" hace que "Todas" valga null y no el texto "null" -->
+      <option [ngValue]="null">Todas</option>
+      @for (ciudad of ciudades(); track ciudad) {
+        <option [ngValue]="ciudad">{{ ciudad }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="filtro-huespedes" class="form-label">Huéspedes</label>
+    <input id="filtro-huespedes" type="number" min="1" class="form-control"
+           formControlName="huespedes" placeholder="¿Cuántos son?" />
+  </div>
+
+  <div class="mb-3">
+    <label for="filtro-tipo" class="form-label">Tipo de alojamiento</label>
+    <select id="filtro-tipo" class="form-select" formControlName="tipo">
+      <option [ngValue]="null">Todos</option>
+      @for (tipo of tipos(); track tipo) {
+        <option [ngValue]="tipo">{{ tipo }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="filtro-precio" class="form-label">Precio máximo por noche</label>
+    <div class="input-group">
+      <span class="input-group-text">$</span>
+      <input id="filtro-precio" type="number" min="1" step="10000" class="form-control"
+             formControlName="precioMaximo" placeholder="Sin límite" />
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-outline-secondary" (click)="limpiar()">
+    <i class="bi bi-x-circle"></i> Limpiar filtros
+  </button>
+</form>

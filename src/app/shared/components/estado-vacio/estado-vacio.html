@@ -1,0 +1,9 @@
+<div class="estado-vacio text-center rounded-3 p-5">
+  <i class="bi bi-{{ icono() }} icono"></i>
+  <h2 class="h4 mt-3">{{ titulo() }}</h2>
+  @if (mensaje()) {
+    <p class="text-muted mb-4">{{ mensaje() }}</p>
+  }
+  <!-- Aquí aparece lo que la página ponga entre <app-estado-vacio> y </app-estado-vacio> -->
+  <ng-content />
+</div>

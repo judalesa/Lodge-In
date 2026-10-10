@@ -1,0 +1,32 @@
+<a [routerLink]="['/alojamientos', alojamiento().id]" class="card h-100 shadow-sm text-decoration-none text-body">
+  <img [src]="alojamiento().imagenPrincipal" [alt]="alojamiento().nombre" class="card-img-top" />
+
+  <div class="card-body d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-start gap-2">
+      <h5 class="card-title mb-1">{{ alojamiento().nombre }}</h5>
+      <span class="text-nowrap">
+        <i class="bi bi-star-fill text-warning"></i> {{ alojamiento().calificacion }}
+      </span>
+    </div>
+
+    <p class="text-muted small mb-2">
+      <i class="bi bi-geo-alt"></i> {{ alojamiento().ciudad }}
+      · {{ alojamiento().tipo }}
+      · <i class="bi bi-people"></i> {{ alojamiento().capacidad }} huéspedes
+    </p>
+
+    <div class="mb-3">
+      @for (servicio of serviciosVisibles(); track servicio) {
+        <span class="badge text-bg-light border me-1">{{ servicio }}</span>
+      }
+      @if (serviciosRestantes() > 0) {
+        <span class="badge text-bg-secondary">+{{ serviciosRestantes() }}</span>
+      }
+    </div>
+
+    <p class="mt-auto mb-0">
+      <span class="fs-5 fw-bold">{{ alojamiento().precioNoche | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+      <span class="text-muted"> / noche</span>
+    </p>
+  </div>
+</a>

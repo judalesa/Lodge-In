@@ -1,2 +1,12 @@
-<h1>Mis reservas</h1>
-<p class="text-muted">Aquí irán las reservas guardadas (Fase 8).</p>
+<h1 class="mb-4">Mis reservas</h1>
+
+<!-- Por ahora siempre vacío; en la Fase 8 solo se muestra cuando no hay reservas. -->
+<app-estado-vacio
+  icono="calendar-x"
+  titulo="Aún no tienes reservas"
+  mensaje="Cuando reserves un alojamiento, aparecerá aquí."
+>
+  <a routerLink="/alojamientos" class="btn btn-primary">
+    <i class="bi bi-search"></i> Explorar alojamientos
+  </a>
+</app-estado-vacio>
