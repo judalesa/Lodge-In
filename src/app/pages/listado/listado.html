@@ -6,7 +6,12 @@
 <div class="row g-4">
   <!-- Columna de filtros: arriba en celular, a la izquierda en pantalla grande -->
   <aside class="col-lg-3">
-    <app-filtros [ciudades]="ciudades()" [tipos]="tipos()" (filtrosCambiados)="filtros.set($event)" />
+    <app-filtros
+      [ciudades]="ciudades()"
+      [tipos]="tipos()"
+      [valoresIniciales]="filtrosIniciales"
+      (filtrosCambiados)="cambiarFiltros($event)"
+    />
   </aside>
 
   <!-- Columna de resultados -->

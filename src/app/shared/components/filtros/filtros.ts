@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, OnInit, input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
@@ -11,12 +11,15 @@ import { FiltrosBusqueda, TipoAlojamiento } from '../../../core/models';
   styleUrl: './filtros.css',
   templateUrl: './filtros.html',
 })
-export class Filtros {
+export class Filtros implements OnInit {
   /** Ciudades para llenar el <select> (las da el padre, que las saca del servicio). */
   readonly ciudades = input<string[]>([]);
 
   /** Tipos de alojamiento para llenar el <select>. */
   readonly tipos = input<TipoAlojamiento[]>([]);
+
+  /** Filtros con los que arranca el formulario (por ejemplo, los que vienen en la URL). */
+  readonly valoresIniciales = input<FiltrosBusqueda | null>(null);
 
   /** Avisa al padre cada vez que el usuario cambia algún filtro. */
   readonly filtrosCambiados = output<FiltrosBusqueda>();
@@ -36,6 +39,16 @@ export class Filtros {
     this.form.valueChanges
       .pipe(debounceTime(300), takeUntilDestroyed())
       .subscribe(() => this.filtrosCambiados.emit(this.leerFiltros()));
+  }
+
+  /** Al iniciar, llena el formulario con los valores iniciales, si los hay. */
+  ngOnInit(): void {
+    const iniciales = this.valoresIniciales();
+    if (iniciales) {
+      // emitEvent: false → llenar el formulario NO dispara valueChanges.
+      // El padre ya conoce estos filtros; no hace falta que se los devolvamos.
+      this.form.patchValue(iniciales, { emitEvent: false });
+    }
   }
 
   /** Deja todos los campos en null (el padre también lo llamará desde el estado vacío). */
