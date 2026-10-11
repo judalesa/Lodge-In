@@ -1,0 +1,6 @@
+/* Foto pequeña del alojamiento en la tabla */
+.miniatura {
+  width: 56px;
+  height: 40px;
+  object-fit: cover;
+}

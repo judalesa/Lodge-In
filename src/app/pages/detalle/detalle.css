@@ -14,3 +14,12 @@
 .cotizacion {
   top: 1rem;
 }
+
+/* En pantallas grandes la tarjeta queda fija (sticky). Con el formulario de reserva crece,
+   así que si no cabe en la pantalla tiene su propio scroll. */
+@media (min-width: 992px) {
+  .cotizacion {
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+}

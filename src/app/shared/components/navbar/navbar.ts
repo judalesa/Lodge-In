@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ReservaService } from '../../../core/services/reserva.service';
 
 /** Barra de navegación superior, visible en todas las páginas. */
 @Component({
@@ -8,4 +9,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './navbar.css',
   templateUrl: './navbar.html',
 })
-export class Navbar {}
+export class Navbar {
+  /** Misma señal que usa Mis reservas: el contador cambia apenas se crea una reserva. */
+  protected readonly reservas = inject(ReservaService).reservas;
+}
