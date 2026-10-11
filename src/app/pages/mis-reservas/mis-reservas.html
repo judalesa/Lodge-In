@@ -1,12 +1,53 @@
 <h1 class="mb-4">Mis reservas</h1>
 
-<!-- Por ahora siempre vacío; en la Fase 8 solo se muestra cuando no hay reservas. -->
-<app-estado-vacio
-  icono="calendar-x"
-  titulo="Aún no tienes reservas"
-  mensaje="Cuando reserves un alojamiento, aparecerá aquí."
->
-  <a routerLink="/alojamientos" class="btn btn-primary">
-    <i class="bi bi-search"></i> Explorar alojamientos
-  </a>
-</app-estado-vacio>
+@if (reservas().length > 0) {
+  <!-- table-responsive: en celulares la tabla se desplaza de lado en vez de romper la página -->
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Código</th>
+          <th scope="col">Alojamiento</th>
+          <th scope="col">Ciudad</th>
+          <th scope="col">Llegada</th>
+          <th scope="col">Salida</th>
+          <th scope="col" class="text-center">Huéspedes</th>
+          <th scope="col" class="text-end">Total</th>
+          <th scope="col">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of reservas(); track r.id) {
+          <tr>
+            <td class="text-muted small">{{ r.id }}</td>
+            <td>
+              <a [routerLink]="['/alojamientos', r.alojamientoId]" class="d-flex align-items-center gap-2 text-decoration-none">
+                <img [src]="r.imagen" [alt]="r.alojamientoNombre" class="miniatura rounded" />
+                <span class="fw-semibold">{{ r.alojamientoNombre }}</span>
+              </a>
+            </td>
+            <td>{{ r.ciudad }}</td>
+            <td class="text-nowrap">{{ r.fechaLlegada | date: 'd MMM y' }}</td>
+            <td class="text-nowrap">{{ r.fechaSalida | date: 'd MMM y' }}</td>
+            <td class="text-center">{{ r.huespedes }}</td>
+            <td class="text-end text-nowrap">{{ r.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>
+              <span class="badge" [class.text-bg-success]="r.estado === 'CONFIRMADA'"
+                    [class.text-bg-secondary]="r.estado === 'CANCELADA'">{{ r.estado }}</span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+} @else {
+  <app-estado-vacio
+    icono="calendar-x"
+    titulo="Aún no tienes reservas"
+    mensaje="Cuando reserves un alojamiento, aparecerá aquí."
+  >
+    <a routerLink="/alojamientos" class="btn btn-primary">
+      <i class="bi bi-search"></i> Explorar alojamientos
+    </a>
+  </app-estado-vacio>
+}

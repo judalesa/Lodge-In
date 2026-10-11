@@ -23,7 +23,13 @@
           <a class="nav-link" routerLink="/alojamientos" routerLinkActive="active">Alojamientos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/mis-reservas" routerLinkActive="active">Mis reservas</a>
+          <a class="nav-link" routerLink="/mis-reservas" routerLinkActive="active">
+            Mis reservas
+            <!-- Contador de reservas: solo aparece si hay al menos una -->
+            @if (reservas().length > 0) {
+              <span class="badge rounded-pill text-bg-light ms-1">{{ reservas().length }}</span>
+            }
+          </a>
         </li>
       </ul>
     </div>
