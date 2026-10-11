@@ -124,8 +124,8 @@
             Tarifa de limpieza: {{ a.tarifaLimpieza | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
           </p>
           <hr />
-          <!-- Espacio reservado: aquí va el formulario de cotización (Fase 7) -->
-          <p class="text-muted small mb-0"><i class="bi bi-calculator"></i> Aquí podrás cotizar tu estadía.</p>
+          <h2 class="h6 mb-3">Cotiza tu estadía</h2>
+          <app-cotizacion-form [alojamiento]="a" />
         </div>
       </div>
     </aside>
