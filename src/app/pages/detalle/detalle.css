@@ -1,0 +1,16 @@
+/* Todas las fotos de la galería con la misma altura, recortadas sin deformar. */
+.galeria-img {
+  height: 420px;
+  object-fit: cover;
+}
+
+@media (max-width: 576px) {
+  .galeria-img {
+    height: 260px;
+  }
+}
+
+/* La tarjeta de precio se queda visible al bajar, sin quedar pegada debajo del navbar. */
+.cotizacion {
+  top: 1rem;
+}

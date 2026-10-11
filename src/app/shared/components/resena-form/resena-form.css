@@ -1,0 +1,10 @@
+/* Estrellas grandes y clicables. */
+.estrella {
+  font-size: 1.75rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.estrella:hover {
+  transform: scale(1.15);
+}

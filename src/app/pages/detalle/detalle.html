@@ -1,2 +1,134 @@
-<h1>Detalle del alojamiento {{ id() }}</h1>
-<p class="text-muted">Aquí irán la información, la cotización y las reseñas (Fase 6).</p>
+@let a = alojamiento();
+
+@if (a === null) {
+  <!-- Cargando -->
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="text-muted mt-3">Cargando alojamiento...</p>
+  </div>
+} @else if (a) {
+  <a routerLink="/alojamientos" class="d-inline-block mb-3 text-decoration-none">
+    <i class="bi bi-arrow-left"></i> Volver a alojamientos
+  </a>
+
+  <!-- Encabezado -->
+  <header class="mb-4">
+    <h1 class="mb-1">{{ a.nombre }}</h1>
+    <p class="text-muted mb-0">
+      <i class="bi bi-star-fill text-warning"></i> <strong class="text-body">{{ a.calificacion }}</strong>
+      · <i class="bi bi-geo-alt"></i> {{ a.ciudad }} · {{ a.ubicacion }}
+    </p>
+  </header>
+
+  <div class="row g-4">
+    <!-- Columna izquierda: información -->
+    <div class="col-lg-8">
+      <!-- Galería: carousel de Bootstrap. El id debe ser único para que las flechas sepan qué carousel mover. -->
+      <div [id]="'galeria-' + a.id" class="carousel slide rounded-4 overflow-hidden shadow-sm mb-4">
+        <div class="carousel-inner">
+          @for (imagen of a.imagenes; track imagen; let primera = $first; let i = $index) {
+            <!-- Solo la primera imagen arranca con la clase "active" (la que se ve) -->
+            <div class="carousel-item" [class.active]="primera">
+              <img [src]="imagen" class="d-block w-100 galeria-img" [alt]="a.nombre + ' - foto ' + (i + 1)" />
+            </div>
+          }
+        </div>
+
+        <!-- Flechas: solo si hay más de una imagen -->
+        @if (a.imagenes.length > 1) {
+          <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#galeria-' + a.id" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#galeria-' + a.id" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
+        }
+      </div>
+
+      <!-- Características -->
+      <div class="d-flex flex-wrap gap-4 border-top border-bottom py-3 mb-4">
+        <span><i class="bi bi-house-door text-primary"></i> {{ a.tipo }}</span>
+        <span><i class="bi bi-people text-primary"></i> {{ a.capacidad }} huéspedes</span>
+        <span><i class="bi bi-door-closed text-primary"></i> {{ a.habitaciones }} {{ a.habitaciones === 1 ? 'habitación' : 'habitaciones' }}</span>
+        <span><i class="bi bi-moon-stars text-primary"></i> {{ a.camas }} {{ a.camas === 1 ? 'cama' : 'camas' }}</span>
+        <span><i class="bi bi-droplet text-primary"></i> {{ a.banos }} {{ a.banos === 1 ? 'baño' : 'baños' }}</span>
+      </div>
+
+      <!-- Descripción -->
+      <h2 class="h4">Acerca de este alojamiento</h2>
+      <p>{{ a.descripcion }}</p>
+
+      <!-- Servicios: en 2 columnas, cada uno con su ícono -->
+      <h2 class="h4 mt-4">Lo que ofrece este lugar</h2>
+      <ul class="row row-cols-1 row-cols-sm-2 list-unstyled g-2 mb-4">
+        @for (servicio of a.servicios; track servicio) {
+          <li class="col">
+            <i class="bi {{ iconoServicio(servicio) }} text-primary me-2"></i>{{ servicio }}
+          </li>
+        }
+      </ul>
+
+      <!-- Reglas -->
+      <h2 class="h4">Reglas de la casa</h2>
+      <ul class="list-unstyled mb-4">
+        @for (regla of a.reglas; track regla) {
+          <li class="mb-1"><i class="bi bi-x-circle text-danger me-2"></i>{{ regla }}</li>
+        }
+      </ul>
+
+      <!-- Reseñas -->
+      <section class="border-top pt-4">
+        <h2 class="h4 mb-3">
+          <i class="bi bi-chat-square-text"></i>
+          @if (promedio() !== null) {
+            <i class="bi bi-star-fill text-warning"></i> {{ promedio() }} ·
+          }
+          {{ resenas().length }} {{ resenas().length === 1 ? 'reseña' : 'reseñas' }}
+        </h2>
+
+        @for (resena of resenas(); track resena.id) {
+          <article class="card card-body mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong>{{ resena.usuario }}</strong>
+              <span class="text-warning" [attr.aria-label]="resena.calificacion + ' de 5 estrellas'">
+                @for (n of estrellas; track n) {
+                  <!-- Estrella llena si n <= calificación, vacía si no -->
+                  <i class="bi" [class.bi-star-fill]="n <= resena.calificacion" [class.bi-star]="n > resena.calificacion"></i>
+                }
+              </span>
+            </div>
+            <p class="mb-0">{{ resena.comentario }}</p>
+          </article>
+        } @empty {
+          <p class="text-muted">Este alojamiento aún no tiene reseñas.</p>
+        }
+
+        <!-- Formulario para una reseña nueva -->
+        <app-resena-form [alojamientoId]="a.id" />
+      </section>
+    </div>
+
+    <!-- Columna derecha: precio y, en la Fase 7, la cotización -->
+    <aside class="col-lg-4">
+      <div class="card shadow-sm sticky-lg-top cotizacion">
+        <div class="card-body">
+          <p class="mb-1">
+            <span class="fs-4 fw-bold">{{ a.precioNoche | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+            <span class="text-muted"> / noche</span>
+          </p>
+          <p class="text-muted small mb-0">
+            Tarifa de limpieza: {{ a.tarifaLimpieza | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+          </p>
+          <hr />
+          <!-- Espacio reservado: aquí va el formulario de cotización (Fase 7) -->
+          <p class="text-muted small mb-0"><i class="bi bi-calculator"></i> Aquí podrás cotizar tu estadía.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+}
+<!-- Si es undefined no se muestra nada: el effect() ya está llevando a la página 404 -->
