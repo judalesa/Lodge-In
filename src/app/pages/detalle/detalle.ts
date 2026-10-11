@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { AlojamientoService } from '../../core/services/alojamiento.service';
 import { ResenaService } from '../../core/services/resena.service';
+import { ResenaForm } from '../../shared/components/resena-form/resena-form';
 
 /** Ícono de Bootstrap Icons para cada servicio. Si un servicio no está aquí, se usa ICONO_SERVICIO_DEFECTO. */
 const ICONOS_SERVICIO: Record<string, string> = {
@@ -23,7 +24,7 @@ const ICONO_SERVICIO_DEFECTO = 'bi-check-circle';
 
 /** Detalle de un alojamiento, con cotización y reseñas. */
 @Component({
-  imports: [CurrencyPipe, RouterLink],
+  imports: [CurrencyPipe, ResenaForm, RouterLink],
   selector: 'app-detalle',
   styleUrl: './detalle.css',
   templateUrl: './detalle.html',

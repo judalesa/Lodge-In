@@ -106,6 +106,9 @@
         } @empty {
           <p class="text-muted">Este alojamiento aún no tiene reseñas.</p>
         }
+
+        <!-- Formulario para una reseña nueva -->
+        <app-resena-form [alojamientoId]="a.id" />
       </section>
     </div>
 

@@ -1,0 +1,69 @@
+<form [formGroup]="form" (ngSubmit)="publicar()" class="card card-body bg-body-tertiary">
+  <h3 class="h5 mb-3"><i class="bi bi-pencil-square"></i> Deja tu reseña</h3>
+
+  @if (enviada()) {
+    <div class="alert alert-success py-2" role="alert">
+      <i class="bi bi-check-circle"></i> ¡Gracias por tu reseña!
+    </div>
+  }
+
+  <!-- Nombre -->
+  <div class="mb-3">
+    <label for="resena-usuario" class="form-label">Tu nombre</label>
+    <input id="resena-usuario" type="text" class="form-control" formControlName="usuario"
+           [class.is-invalid]="tieneError('usuario')" placeholder="Ej.: Ana Pérez" />
+    @if (tieneError('usuario')) {
+      <div class="invalid-feedback">
+        @if (form.controls.usuario.hasError('required')) { Escribe tu nombre. }
+        @else if (form.controls.usuario.hasError('minlength')) { Mínimo 3 caracteres. }
+        @else { Máximo 40 caracteres. }
+      </div>
+    }
+  </div>
+
+  <!-- Calificación con estrellas -->
+  <div class="mb-3">
+    <span class="form-label d-block">Calificación</span>
+    <div class="estrellas" role="radiogroup" aria-label="Calificación de 1 a 5 estrellas">
+      @for (n of estrellas; track n) {
+        <button type="button" class="btn btn-link p-0 me-1 text-warning estrella"
+                (click)="calificar(n)" [attr.aria-label]="n + (n === 1 ? ' estrella' : ' estrellas')"
+                [attr.aria-checked]="form.controls.calificacion.value === n" role="radio">
+          <i class="bi" [class.bi-star-fill]="n <= (form.controls.calificacion.value ?? 0)"
+             [class.bi-star]="n > (form.controls.calificacion.value ?? 0)"></i>
+        </button>
+      }
+    </div>
+    @if (tieneError('calificacion')) {
+      <div class="text-danger small mt-1">Elige de 1 a 5 estrellas.</div>
+    }
+  </div>
+
+  <!-- Comentario -->
+  <div class="mb-3">
+    <label for="resena-comentario" class="form-label">Comentario</label>
+    <textarea id="resena-comentario" rows="3" class="form-control" formControlName="comentario"
+              [class.is-invalid]="tieneError('comentario')"
+              placeholder="¿Qué te gustó? ¿Qué se podría mejorar?"></textarea>
+    <div class="d-flex justify-content-between">
+      <div>
+        @if (tieneError('comentario')) {
+          <div class="text-danger small">
+            @if (form.controls.comentario.hasError('required')) { Escribe un comentario. }
+            @else if (form.controls.comentario.hasError('minlength')) { Mínimo 10 caracteres. }
+            @else { Máximo {{ MAX_COMENTARIO }} caracteres. }
+          </div>
+        }
+      </div>
+      <small class="text-muted" [class.text-danger]="comentario().length > MAX_COMENTARIO">
+        {{ comentario().length }} / {{ MAX_COMENTARIO }}
+      </small>
+    </div>
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      <i class="bi bi-send"></i> Publicar reseña
+    </button>
+  </div>
+</form>
