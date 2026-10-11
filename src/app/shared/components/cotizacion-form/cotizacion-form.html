@@ -50,3 +50,35 @@
     </button>
   </div>
 </form>
+
+@if (sinResultado()) {
+  <div class="alert alert-warning small mt-3 mb-0">No se pudo calcular con esos datos. Revisa las fechas y los huéspedes.</div>
+}
+
+<!-- Desglose de la cotización -->
+@if (cotizacion(); as c) {
+  <ul class="list-group list-group-flush mt-3 desglose">
+    <li class="list-group-item d-flex justify-content-between px-0">
+      <span>
+        {{ alojamiento().precioNoche | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+        × {{ c.noches }} {{ c.noches === 1 ? 'noche' : 'noches' }}
+      </span>
+      <span>{{ c.subtotal | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between px-0">
+      <span>Tarifa de limpieza</span>
+      <span>{{ c.tarifaLimpieza | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between px-0">
+      <span>Tarifa de servicio (10 %)</span>
+      <span>{{ c.tarifaServicio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between px-0 fw-bold fs-5">
+      <span>Total</span>
+      <span>{{ c.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+    </li>
+  </ul>
+  <p class="text-muted small mb-0">
+    {{ c.huespedes }} {{ c.huespedes === 1 ? 'huésped' : 'huéspedes' }}. Si cambias algún dato tendrás que cotizar de nuevo.
+  </p>
+}

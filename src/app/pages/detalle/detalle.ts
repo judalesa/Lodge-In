@@ -1,8 +1,9 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { CurrencyPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
+import { Cotizacion } from '../../core/models';
 import { AlojamientoService } from '../../core/services/alojamiento.service';
 import { ResenaService } from '../../core/services/resena.service';
 import { CotizacionForm } from '../../shared/components/cotizacion-form/cotizacion-form';
@@ -84,6 +85,12 @@ export class Detalle {
     const suma = lista.reduce((total, r) => total + r.calificacion, 0);
     return Math.round((suma / lista.length) * 10) / 10;
   });
+
+  /**
+   * Cotización válida actual, o null si no hay (o si el usuario cambió los datos).
+   * La avisa el formulario de cotización; en la Fase 8 se usa para habilitar "Reservar" (RN-07).
+   */
+  protected readonly cotizacion = signal<Cotizacion | null>(null);
 
   /** Para dibujar las 5 estrellas de cada reseña con @for. */
   protected readonly estrellas = [1, 2, 3, 4, 5];

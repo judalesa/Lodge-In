@@ -125,7 +125,7 @@
           </p>
           <hr />
           <h2 class="h6 mb-3">Cotiza tu estadía</h2>
-          <app-cotizacion-form [alojamiento]="a" />
+          <app-cotizacion-form [alojamiento]="a" (cotizacionCambiada)="cotizacion.set($event)" />
         </div>
       </div>
     </aside>
