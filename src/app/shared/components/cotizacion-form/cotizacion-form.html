@@ -1,0 +1,84 @@
+<form [formGroup]="form" (ngSubmit)="cotizar()" novalidate>
+  <div class="row g-2">
+    <!-- Llegada -->
+    <div class="col-6">
+      <label for="cot-llegada" class="form-label small mb-1">Llegada</label>
+      <input id="cot-llegada" type="date" class="form-control" formControlName="llegada"
+             [min]="hoy" [class.is-invalid]="tieneError('llegada')" />
+      @if (tieneError('llegada')) {
+        <div class="invalid-feedback">
+          @if (form.controls.llegada.hasError('required')) { Elige la fecha de llegada. }
+          @else { La llegada no puede ser una fecha pasada. }
+        </div>
+      }
+    </div>
+
+    <!-- Salida -->
+    <div class="col-6">
+      <label for="cot-salida" class="form-label small mb-1">Salida</label>
+      <input id="cot-salida" type="date" class="form-control" formControlName="salida"
+             [min]="form.controls.llegada.value || hoy"
+             [class.is-invalid]="tieneError('salida') || rangoInvalido()" />
+      @if (tieneError('salida')) {
+        <div class="invalid-feedback">Elige la fecha de salida.</div>
+      } @else if (rangoInvalido()) {
+        <div class="invalid-feedback">La salida debe ser después de la llegada.</div>
+      }
+    </div>
+  </div>
+
+  <!-- Huéspedes -->
+  <div class="mt-2 mb-3">
+    <label for="cot-huespedes" class="form-label small mb-1">Huéspedes</label>
+    <input id="cot-huespedes" type="number" min="1" [max]="alojamiento().capacidad" class="form-control"
+           formControlName="huespedes" [class.is-invalid]="tieneError('huespedes')" />
+    @if (tieneError('huespedes')) {
+      <div class="invalid-feedback">
+        @if (form.controls.huespedes.hasError('max')) {
+          Máximo {{ alojamiento().capacidad }} huéspedes en este alojamiento.
+        } @else {
+          Debe haber al menos 1 huésped.
+        }
+      </div>
+    }
+  </div>
+
+  <!-- RN-06: no se puede cotizar mientras el formulario sea inválido -->
+  <div class="d-grid">
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      <i class="bi bi-calculator"></i> Cotizar
+    </button>
+  </div>
+</form>
+
+@if (sinResultado()) {
+  <div class="alert alert-warning small mt-3 mb-0">No se pudo calcular con esos datos. Revisa las fechas y los huéspedes.</div>
+}
+
+<!-- Desglose de la cotización -->
+@if (cotizacion(); as c) {
+  <ul class="list-group list-group-flush mt-3 desglose">
+    <li class="list-group-item d-flex justify-content-between px-0">
+      <span>
+        {{ alojamiento().precioNoche | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+        × {{ c.noches }} {{ c.noches === 1 ? 'noche' : 'noches' }}
+      </span>
+      <span>{{ c.subtotal | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between px-0">
+      <span>Tarifa de limpieza</span>
+      <span>{{ c.tarifaLimpieza | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between px-0">
+      <span>Tarifa de servicio (10 %)</span>
+      <span>{{ c.tarifaServicio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between px-0 fw-bold fs-5">
+      <span>Total</span>
+      <span>{{ c.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+    </li>
+  </ul>
+  <p class="text-muted small mb-0">
+    {{ c.huespedes }} {{ c.huespedes === 1 ? 'huésped' : 'huéspedes' }}. Si cambias algún dato tendrás que cotizar de nuevo.
+  </p>
+}
