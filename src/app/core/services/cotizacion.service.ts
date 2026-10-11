@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Alojamiento, Cotizacion } from '../models';
+import { hoyISO } from '../validators/fechas.validators';
 
 /** Tarifa de servicio de la plataforma: 10 % del subtotal (RN-08). */
 const TARIFA_SERVICIO = 0.1;
@@ -27,7 +28,7 @@ export class CotizacionService {
     if (huespedes < 1 || huespedes > alojamiento.capacidad) {
       return null;
     }
-    if (llegada < this.hoyISO()) {
+    if (llegada < hoyISO()) {
       return null; // con el formato 'yyyy-MM-dd' se pueden comparar fechas como texto
     }
 
@@ -69,13 +70,5 @@ export class CotizacionService {
       return null;
     }
     return Date.UTC(anio, mes - 1, dia); // en JavaScript los meses van de 0 (enero) a 11 (diciembre)
-  }
-
-  /** Fecha de hoy (hora local del usuario) como 'yyyy-MM-dd'. */
-  private hoyISO(): string {
-    const hoy = new Date();
-    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-    const dia = String(hoy.getDate()).padStart(2, '0');
-    return `${hoy.getFullYear()}-${mes}-${dia}`;
   }
 }
