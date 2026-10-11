@@ -8,6 +8,7 @@ import { AlojamientoService } from '../../core/services/alojamiento.service';
 import { ResenaService } from '../../core/services/resena.service';
 import { CotizacionForm } from '../../shared/components/cotizacion-form/cotizacion-form';
 import { ResenaForm } from '../../shared/components/resena-form/resena-form';
+import { ReservaForm } from '../../shared/components/reserva-form/reserva-form';
 
 /** Ícono de Bootstrap Icons para cada servicio. Si un servicio no está aquí, se usa ICONO_SERVICIO_DEFECTO. */
 const ICONOS_SERVICIO: Record<string, string> = {
@@ -26,7 +27,7 @@ const ICONO_SERVICIO_DEFECTO = 'bi-check-circle';
 
 /** Detalle de un alojamiento, con cotización y reseñas. */
 @Component({
-  imports: [CotizacionForm, CurrencyPipe, ResenaForm, RouterLink],
+  imports: [CotizacionForm, CurrencyPipe, ResenaForm, ReservaForm, RouterLink],
   selector: 'app-detalle',
   styleUrl: './detalle.css',
   templateUrl: './detalle.html',
@@ -88,9 +89,22 @@ export class Detalle {
 
   /**
    * Cotización válida actual, o null si no hay (o si el usuario cambió los datos).
-   * La avisa el formulario de cotización; en la Fase 8 se usa para habilitar "Reservar" (RN-07).
+   * La avisa el formulario de cotización y habilita el botón "Reservar" (RN-07).
    */
   protected readonly cotizacion = signal<Cotizacion | null>(null);
+
+  /** true después de pulsar "Reservar": muestra el formulario de reserva. */
+  protected readonly mostrarReserva = signal(false);
+
+  /**
+   * El formulario de cotización avisa una cotización nueva o null.
+   * En ambos casos se esconde el formulario de reserva: si los datos cambiaron,
+   * hay que volver a pulsar "Reservar" con la cotización nueva.
+   */
+  protected cambiarCotizacion(cotizacion: Cotizacion | null): void {
+    this.cotizacion.set(cotizacion);
+    this.mostrarReserva.set(false);
+  }
 
   /** Para dibujar las 5 estrellas de cada reseña con @for. */
   protected readonly estrellas = [1, 2, 3, 4, 5];

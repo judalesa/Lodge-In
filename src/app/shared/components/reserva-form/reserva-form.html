@@ -1,0 +1,57 @@
+@if (reserva(); as r) {
+  <!-- Confirmación: reemplaza al formulario después de reservar -->
+  <div class="alert alert-success mb-0" role="alert">
+    <h3 class="h6 alert-heading"><i class="bi bi-check-circle-fill"></i> ¡Reserva confirmada!</h3>
+    <p class="mb-2">Tu código de reserva es <strong>{{ r.id }}</strong>.</p>
+    <a routerLink="/mis-reservas" class="alert-link">Ver mis reservas <i class="bi bi-arrow-right"></i></a>
+  </div>
+} @else {
+  @let c = cotizacion();
+
+  <!-- Resumen de lo que se va a reservar -->
+  <div class="resumen bg-body-tertiary rounded p-3 mb-3 small">
+    <p class="fw-semibold mb-1">{{ alojamiento().nombre }}</p>
+    <p class="mb-1">
+      <i class="bi bi-calendar-event"></i>
+      {{ c.fechaLlegada | date: 'd MMM y' }} → {{ c.fechaSalida | date: 'd MMM y' }}
+    </p>
+    <p class="mb-1">
+      <i class="bi bi-people"></i>
+      {{ c.huespedes }} {{ c.huespedes === 1 ? 'huésped' : 'huéspedes' }} ·
+      {{ c.noches }} {{ c.noches === 1 ? 'noche' : 'noches' }}
+    </p>
+    <p class="mb-0 fw-bold">Total: {{ c.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="confirmar()" novalidate>
+    <!-- Nombre -->
+    <div class="mb-3">
+      <label for="reserva-nombre" class="form-label">Nombre completo</label>
+      <input id="reserva-nombre" type="text" class="form-control" formControlName="nombre"
+             [class.is-invalid]="tieneError('nombre')" placeholder="Ej.: Ana Pérez" autocomplete="name" />
+      @if (tieneError('nombre')) {
+        <div class="invalid-feedback">
+          @if (form.controls.nombre.hasError('required')) { Escribe tu nombre. }
+          @else { Mínimo 3 caracteres. }
+        </div>
+      }
+    </div>
+
+    <!-- Correo -->
+    <div class="mb-3">
+      <label for="reserva-correo" class="form-label">Correo electrónico</label>
+      <input id="reserva-correo" type="email" class="form-control" formControlName="correo"
+             [class.is-invalid]="tieneError('correo')" placeholder="Ej.: ana@correo.com" autocomplete="email" />
+      @if (tieneError('correo')) {
+        <div class="invalid-feedback">
+          @if (form.controls.correo.hasError('required')) { Escribe tu correo. }
+          @else { Escribe un correo válido. }
+        </div>
+      }
+    </div>
+
+    <button type="submit" class="btn btn-success w-100" [disabled]="form.invalid">
+      <i class="bi bi-check2-circle"></i> Confirmar reserva
+    </button>
+  </form>
+}
