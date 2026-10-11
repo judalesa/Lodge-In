@@ -1,12 +1,13 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { CurrencyPipe } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { AlojamientoService } from '../../core/services/alojamiento.service';
 
 /** Detalle de un alojamiento, con cotización y reseñas. */
 @Component({
-  imports: [],
+  imports: [CurrencyPipe, RouterLink],
   selector: 'app-detalle',
   styleUrl: './detalle.css',
   templateUrl: './detalle.html',
