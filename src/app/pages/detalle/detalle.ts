@@ -1,9 +1,10 @@
-import { Component, effect, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { CurrencyPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { AlojamientoService } from '../../core/services/alojamiento.service';
+import { ResenaService } from '../../core/services/resena.service';
 
 /** Ícono de Bootstrap Icons para cada servicio. Si un servicio no está aquí, se usa ICONO_SERVICIO_DEFECTO. */
 const ICONOS_SERVICIO: Record<string, string> = {
@@ -29,6 +30,7 @@ const ICONO_SERVICIO_DEFECTO = 'bi-check-circle';
 })
 export class Detalle {
   private readonly alojamientoService = inject(AlojamientoService);
+  private readonly resenaService = inject(ResenaService);
   private readonly router = inject(Router);
 
   /**
@@ -52,11 +54,34 @@ export class Detalle {
     { initialValue: null }
   );
 
-  /** Reseñas del alojamiento (las del JSON). Se vuelven a pedir si cambia el id. */
-  protected readonly resenas = toSignal(
+  /** Reseñas del JSON para este alojamiento. Se vuelven a pedir si cambia el id. */
+  private readonly resenasJson = toSignal(
     toObservable(this.id).pipe(switchMap(id => this.alojamientoService.getResenas(Number(id)))),
     { initialValue: [] }
   );
+
+  /**
+   * Todas las reseñas: primero las nuevas de este alojamiento (localStorage) y después las del JSON.
+   * Al publicar una reseña, nuevas() cambia y esta lista se recalcula sola.
+   */
+  protected readonly resenas = computed(() => {
+    const id = Number(this.id());
+    const nuevas = this.resenaService.nuevas().filter(r => r.alojamientoId === id);
+    return [...nuevas, ...this.resenasJson()];
+  });
+
+  /**
+   * Promedio de las reseñas, redondeado a 1 decimal (null si no hay reseñas).
+   * Solo se muestra en la sección de reseñas; la calificación del alojamiento sigue siendo la del JSON.
+   */
+  protected readonly promedio = computed(() => {
+    const lista = this.resenas();
+    if (lista.length === 0) {
+      return null;
+    }
+    const suma = lista.reduce((total, r) => total + r.calificacion, 0);
+    return Math.round((suma / lista.length) * 10) / 10;
+  });
 
   /** Para dibujar las 5 estrellas de cada reseña con @for. */
   protected readonly estrellas = [1, 2, 3, 4, 5];
