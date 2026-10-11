@@ -61,6 +61,49 @@
       <!-- Descripción -->
       <h2 class="h4">Acerca de este alojamiento</h2>
       <p>{{ a.descripcion }}</p>
+
+      <!-- Servicios: en 2 columnas, cada uno con su ícono -->
+      <h2 class="h4 mt-4">Lo que ofrece este lugar</h2>
+      <ul class="row row-cols-1 row-cols-sm-2 list-unstyled g-2 mb-4">
+        @for (servicio of a.servicios; track servicio) {
+          <li class="col">
+            <i class="bi {{ iconoServicio(servicio) }} text-primary me-2"></i>{{ servicio }}
+          </li>
+        }
+      </ul>
+
+      <!-- Reglas -->
+      <h2 class="h4">Reglas de la casa</h2>
+      <ul class="list-unstyled mb-4">
+        @for (regla of a.reglas; track regla) {
+          <li class="mb-1"><i class="bi bi-x-circle text-danger me-2"></i>{{ regla }}</li>
+        }
+      </ul>
+
+      <!-- Reseñas -->
+      <section class="border-top pt-4">
+        <h2 class="h4 mb-3">
+          <i class="bi bi-chat-square-text"></i>
+          {{ resenas().length }} {{ resenas().length === 1 ? 'reseña' : 'reseñas' }}
+        </h2>
+
+        @for (resena of resenas(); track resena.id) {
+          <article class="card card-body mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong>{{ resena.usuario }}</strong>
+              <span class="text-warning" [attr.aria-label]="resena.calificacion + ' de 5 estrellas'">
+                @for (n of estrellas; track n) {
+                  <!-- Estrella llena si n <= calificación, vacía si no -->
+                  <i class="bi" [class.bi-star-fill]="n <= resena.calificacion" [class.bi-star]="n > resena.calificacion"></i>
+                }
+              </span>
+            </div>
+            <p class="mb-0">{{ resena.comentario }}</p>
+          </article>
+        } @empty {
+          <p class="text-muted">Este alojamiento aún no tiene reseñas.</p>
+        }
+      </section>
     </div>
 
     <!-- Columna derecha: precio y, en la Fase 7, la cotización -->

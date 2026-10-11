@@ -5,6 +5,21 @@ import { Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { AlojamientoService } from '../../core/services/alojamiento.service';
 
+/** Ícono de Bootstrap Icons para cada servicio. Si un servicio no está aquí, se usa ICONO_SERVICIO_DEFECTO. */
+const ICONOS_SERVICIO: Record<string, string> = {
+  'Wi-Fi': 'bi-wifi',
+  'Cocina': 'bi-egg-fried',
+  'Televisión': 'bi-tv',
+  'Lavadora': 'bi-droplet-half',
+  'Aire acondicionado': 'bi-snow',
+  'Parqueadero': 'bi-p-square',
+  'Piscina': 'bi-water',
+  'BBQ': 'bi-fire',
+  'Chimenea': 'bi-fire',
+  'Gimnasio': 'bi-bicycle',
+};
+const ICONO_SERVICIO_DEFECTO = 'bi-check-circle';
+
 /** Detalle de un alojamiento, con cotización y reseñas. */
 @Component({
   imports: [CurrencyPipe, RouterLink],
@@ -37,6 +52,15 @@ export class Detalle {
     { initialValue: null }
   );
 
+  /** Reseñas del alojamiento (las del JSON). Se vuelven a pedir si cambia el id. */
+  protected readonly resenas = toSignal(
+    toObservable(this.id).pipe(switchMap(id => this.alojamientoService.getResenas(Number(id)))),
+    { initialValue: [] }
+  );
+
+  /** Para dibujar las 5 estrellas de cada reseña con @for. */
+  protected readonly estrellas = [1, 2, 3, 4, 5];
+
   constructor() {
     // effect() se ejecuta cada vez que cambia un signal que lee (aquí, alojamiento()).
     // Si la búsqueda terminó y no encontró nada, va a la página 404.
@@ -47,5 +71,10 @@ export class Detalle {
         this.router.navigate(['/no-encontrado'], { replaceUrl: true });
       }
     });
+  }
+
+  /** Devuelve la clase del ícono de un servicio. */
+  protected iconoServicio(servicio: string): string {
+    return ICONOS_SERVICIO[servicio] ?? ICONO_SERVICIO_DEFECTO;
   }
 }
