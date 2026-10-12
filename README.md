@@ -1,8 +1,9 @@
 # Lodge In 
 
 Aplicación web (solo frontend) donde los huéspedes de **Inversiones LR** pueden explorar alojamientos temporales en Colombia, filtrarlos, ver su detalle, cotizar una estadía y registrar una reserva simulada.
-Link al repositorio GITHUB:github.com/judalesa/Lodge-In
-
+<br>
+[Link al repositorio GITHUB](https://github.com/judalesa/Lodge-In)
+<br>
 Proyecto del módulo 2 del curso **Desarrollo de Sistemas de Información III**, Ingeniería de Sistemas, Universidad El Bosque.
 
 ## Integrantes
