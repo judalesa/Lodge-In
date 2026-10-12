@@ -4,14 +4,24 @@
 </p>
 
 <div class="row g-4">
-  <!-- Columna de filtros: arriba en celular, a la izquierda en pantalla grande -->
+  <!-- Columna de filtros: a la izquierda en pantalla grande; en celular, plegada detrás del botón "Filtros" -->
   <aside class="col-lg-3">
-    <app-filtros
-      [ciudades]="ciudades()"
-      [tipos]="tipos()"
-      [valoresIniciales]="filtrosIniciales"
-      (filtrosCambiados)="cambiarFiltros($event)"
-    />
+    <!-- d-lg-none: el botón solo se ve en pantallas menores a 992 px -->
+    <button class="btn btn-outline-primary w-100 d-lg-none" type="button"
+            data-bs-toggle="collapse" data-bs-target="#panelFiltros"
+            aria-expanded="false" aria-controls="panelFiltros">
+      <i class="bi bi-funnel"></i> Filtros
+    </button>
+
+    <!-- collapse lo oculta en celular; d-lg-block lo deja siempre visible en pantalla grande -->
+    <div class="collapse d-lg-block mt-3 mt-lg-0" id="panelFiltros">
+      <app-filtros
+        [ciudades]="ciudades()"
+        [tipos]="tipos()"
+        [valoresIniciales]="filtrosIniciales"
+        (filtrosCambiados)="cambiarFiltros($event)"
+      />
+    </div>
   </aside>
 
   <!-- Columna de resultados -->
