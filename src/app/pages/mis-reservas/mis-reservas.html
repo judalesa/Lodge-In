@@ -1,4 +1,5 @@
-<h1 class="mb-4">Mis reservas</h1>
+<h1 class="mb-1">Mis reservas</h1>
+<p class="text-muted mb-4">Reservas guardadas en este navegador.</p>
 
 @if (reservas().length > 0) {
   <!-- table-responsive: en celulares la tabla se desplaza de lado en vez de romper la página -->
@@ -22,7 +23,7 @@
             <td class="text-muted small">{{ r.id }}</td>
             <td>
               <a [routerLink]="['/alojamientos', r.alojamientoId]" class="d-flex align-items-center gap-2 text-decoration-none">
-                <img [src]="r.imagen" [alt]="r.alojamientoNombre" class="miniatura rounded" />
+                <img [src]="r.imagen" [alt]="'Foto de ' + r.alojamientoNombre" class="miniatura rounded" />
                 <span class="fw-semibold">{{ r.alojamientoNombre }}</span>
               </a>
             </td>
